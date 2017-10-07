@@ -1,5 +1,7 @@
-language: java
-jdk:
-  - openjdk7
+language: python
+python:
+	- "2.7"
+	- "3.5"
+# install step should be explict and pip install -r requirements.txt
 script:
-  - echo "Testing works"
+  - locust -f locustfile.py --no-web -c 100 -r 10 --host http://localhost
