@@ -1,7 +1,8 @@
 language: python
 python:
-	- "2.7"
-	- "3.5"
+  - "2.7"
+  - "3.5"
 # install step should be explict and pip install -r requirements.txt
 script:
-  - locust -f locustfile.py --no-web -c 100 -r 10 --host http://localhost
+  - locust -f locustfile.py --no-web --host http://localhost -c 1 -n 2
+# will change -c and -n once we actually have services running
