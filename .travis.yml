@@ -6,3 +6,10 @@ python:
 script:
   - locust -f locustfile.py --no-web --host http://localhost -c 1 -n 2
 # will change -c and -n once we actually have services running
+
+branches:
+   only:
+     - master
+
+notifications:
+  email: false
