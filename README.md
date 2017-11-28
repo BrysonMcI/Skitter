@@ -6,7 +6,7 @@ You are charged with developing a heavily user-centric web application. This web
 ## MySQL setup
 For local dev pull and start the [mysql docker container](https://hub.docker.com/_/mysql/) and run with:
 
-`docker run --name dev-sql -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -v $PWD/mysql-data:/var/lib/mysql`
+`docker run --name dev-sql -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -v $PWD/mysql-data:/var/lib/mysql -v $PWD/00-skitter.sql:/docker-entrypoint-initdb.d/00-skitter.sql mysql`
 
 Where `$PWD` is the Skitter root directory. Mounting a local folder as the MySQL directory will allow easy data persistance.
 Additionally on the first start of the container, run the setup script to create the skitter database, the session table and test user: default_db.sql. 
