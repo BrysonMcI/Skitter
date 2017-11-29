@@ -18,3 +18,8 @@ Just run the the command inside the User-Settings folder (add the -d flag to det
 `docker run -p 80:80 --name php-settings -v $PWD/:/var/www/html php:7.0-apache`
 
 Then install mysqli extension by using an interactive `docker exec` and running `docker-php-ext-install mysqli && docker-php-ext-enable mysqli`
+
+## Flask Setup
+The flask stack here is nginx, gunicorn, and obviously flask. The docker compose file will handle all of this. Enter the Follow-Unfollow directory and run:
+
+`docker-compose up`
