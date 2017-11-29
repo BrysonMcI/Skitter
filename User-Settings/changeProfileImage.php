@@ -90,6 +90,10 @@ if ($stmt = mysqli_prepare($link, "UPDATE users SET photo=? WHERE email=?")){
 	 }
 	 else {
 	 	 $json = json_encode($success);
+		 if(json_last_error()){
+			http_response_code(500);
+			exit();
+		 }
 		 echo $json;
 	 }
 	 //Close Statement
