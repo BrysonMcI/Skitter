@@ -26,7 +26,7 @@ class DBConnector {
 
             //STEP 4: Execute a query
             // Let us select all the records and display them.
-            String sql = "SELECT id, email, name FROM sessions WHERE id=?";
+            String sql = "SELECT id, email FROM sessions WHERE id=?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -37,12 +37,7 @@ class DBConnector {
             while (rs.next()) {
                 //Retrieve by column name
                 String email = rs.getString("email");
-                String name = rs.getString("name");
-
-                //Display values
-                System.out.print("email: " + email);
-                System.out.println(", name: " + name);
-                theUser = new User(name, email);
+                theUser = new User(email);
             }
 
             //STEP 6: Clean-up environment
@@ -73,9 +68,10 @@ class DBConnector {
         return theUser;
     }//end main
 
-    public static boolean createSession(String id, String email, String name) {
+    public static boolean createSession(String id, String email, String username) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        PreparedStatement usr = null;
         boolean success = false;
         try {
             //STEP 2: Register JDBC driver
@@ -85,20 +81,28 @@ class DBConnector {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            //STEP 4: Execute a query
+            //STEP 4: Insert into sessions and users table if needed with a transaction
+            conn.setAutoCommit(false);
 
             System.out.println("Creating statement...");
-            String sql = "INSERT into sessions (id, email, name) VALUES (?, ?, ?)";
+            String sql = "INSERT into sessions (id, email) VALUES (?, ?)";
             stmt = conn.prepareStatement(sql);
 
             //Bind values into the parameters.
             stmt.setString(1, id);
             stmt.setString(2, email);
-            stmt.setString(3, name);
 
-            int rows = stmt.executeUpdate();
-            System.out.println("Rows impacted : " + rows);
-            success = rows > 0;
+            String sql2 = "INSERT IGNORE into users (email, username) VALUES (?, ?)";
+            usr = conn.prepareStatement(sql2);
+            usr.setString(1, email);
+            usr.setString(2, username);
+
+            int usrs = usr.executeUpdate();
+            int ses = stmt.executeUpdate();
+            // finally commit the changes
+            conn.commit();
+            System.out.println("Sessions created: " + ses + "\tUsers updated: " + usrs);
+            success = ses > 0;
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -107,6 +111,11 @@ class DBConnector {
             e.printStackTrace();
         } finally {
             //finally block used to close resources
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             try {
                 if (stmt != null)
                     stmt.close();

@@ -11,16 +11,19 @@ public class SignIn {
     public SignIn(String username, String password, HttpServletResponse response) {
         User user = Auth.login(username, password);
         if(user != null) {
-            this.message = "Welcome: " +user.getName() +" - " + user.getEmail();
             String sid = randomString(32);
-            response.addCookie(new Cookie("sid", sid));
-            DBConnector.createSession(sid, user.getEmail(), user.getName());
+            if (!DBConnector.createSession(sid, user.getEmail(), username)) {
+                this.message = "failed to create session";
+            } else {
+                this.message = user.getEmail();
+                response.addCookie(new Cookie("sid", sid));
+            }
         } else {
             this.message = "username or password incorrect";
         }
     }
 
-    public String getContent() {
+    public String getResponse() {
         return message;
     }
 
