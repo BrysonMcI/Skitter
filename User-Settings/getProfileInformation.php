@@ -69,6 +69,10 @@ if ($stmt = mysqli_prepare($link, "SELECT email, username, photo FROM users WHER
 	 }
 	 else {
 	 	 $json = json_encode($user);
+		 if(json_last_error()){
+			http_response_code(500);
+			exit();
+		 }
 		 echo $json;
 	 }
 	 //Close Statement

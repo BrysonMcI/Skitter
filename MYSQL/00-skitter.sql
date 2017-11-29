@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS followers;
 
---Mediumblob is 16.7MB ish
+-- Mediumblob is 16.7MB ish
 CREATE TABLE users (
 	email varchar(40) not null,
 	username varchar(30) not null,

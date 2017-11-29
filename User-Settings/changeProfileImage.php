@@ -49,7 +49,7 @@ if ($stmt = mysqli_prepare($link, "UPDATE users SET photo=? WHERE email=?")){
 	 $filedata = $_FILES['photo']['tmp_name'];
 	 $filesize = $_FILES['photo']['size'];
 	 
-	 $blob = fopen($filedata, 'rb');
+	 $blob = base64_encode(fread(fopen($filedata, 'rb'), 16000000));
 
 	 $finfo = new finfo(FILEINFO_MIME_TYPE);
 	 if (false === $ext = array_search(
@@ -75,12 +75,12 @@ if ($stmt = mysqli_prepare($link, "UPDATE users SET photo=? WHERE email=?")){
 		exit();
 	 }
 	 $email = mysqli_real_escape_string($link, $email);
-	 if ($username === NULL || $email === NULL){
+	 if ($email === NULL){
 		http_response_code(500);
 		exit();
 	 }
 	 //Bind parameters
-	 mysqli_stmt_bind_param($stmt, "bs", $blob, $email);
+	 mysqli_stmt_bind_param($stmt, "ss", $blob, $email);
 	 //Execute
 	 $success = mysqli_stmt_execute($stmt);
 
