@@ -1,14 +1,21 @@
 const express = require('express');
 const app = express();
-/*const es = require('elasticsearch');
-const esclient = new es.Client({
-	host: 'localhost:9200'
-});
-*/
+const client = require('./connection.js');
+
+// dummy root route
 app.get('/', function (req, res) {
-  res.send('Hello World!');
-})
+  res.json({
+    "message": "you hit the node microservice :)"
+  });
+});
+
+// add a skit as the current user
+app.post('/AddSkit', function (req, res) {
+    res.json({
+        "message": "coming soon :)"
+    });
+});
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-})
+  console.log('node microservice is running on tcp/3000!');
+});

@@ -13,7 +13,10 @@ public class SignIn {
         if(user != null) {
             this.message = "Welcome: " +user.getName() +" - " + user.getEmail();
             String sid = randomString(32);
-            response.addCookie(new Cookie("sid", sid));
+			Cookie c = new Cookie("sid", sid);
+			// c.setSecure(true);	// no https
+			c.setHttpOnly(true);
+            response.addCookie(c);
             DBConnector.createSession(sid, user.getEmail(), user.getName());
         } else {
             this.message = "username or password incorrect";
