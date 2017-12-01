@@ -21,6 +21,9 @@ var searchSkits = function(req, res) {
       query: {
         match: {"author": following.join("|") }
       },
+      sort: [
+        {"timestamp": {"order": "desc"} }
+      ]
     }
     // add sorting by timestamp
   },function (error, response, status) {

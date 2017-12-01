@@ -11,7 +11,7 @@ def proxy(service, req):
     url = "http://{}{}".format(service, req.path)
     s = requests.Session()
     # build our request to pass to X microservice
-    req = requests.Request(req.method, url, cookies=req.cookies, data=req.form)
+    req = requests.Request(req.method, url, cookies=req.cookies, data=req.form, params=req.args)
     prep_req = req.prepare()
     prox_resp = s.send(prep_req)
 
@@ -28,16 +28,16 @@ def isAuthed(req):
     # reduce requests to the auth server
     # one day have this expire, maybe once the backend db does
     if sid_cache.get(sid):
-        return True
+        return sid_cache.get(sid)
 
     url = "http://{}/{}".format(java, "isAuthenticated")
     resp = requests.post(url, data={'sid': sid})
     content = resp.json()
     if content.get('email') == "invalid session":
         return False
-    sid_cache[sid] = True
-    print('added sid to cache:', sid)
-    return True
+    sid_cache[sid] = content.get('email')
+    print('added sid to cache:', sid, sid_cache[sid])
+    return sid_cache[sid]
 
 ### for debug ###
 def pretty_print_POST(req):
