@@ -6,29 +6,38 @@ from flask import request, session
 from config import node, python, ruby, java, php
 
 # takes the microservice, the initial request object and session
-def proxy(service, req, ses):
+def proxy(service, req):
     # rebuild request path for the microservice
     url = "http://{}{}".format(service, req.path)
-    proxResp = None
     s = requests.Session()
-    if req.method == "GET":
-        print('getting {}'.format(url))
-        proxResp = requests.get(url, headers=req.headers, cookies=req.cookies, params=req.args)
-    elif req.method == "POST":
-        print('posting {} with'.format(url))
-        req = requests.Request('POST', url, cookies=req.cookies, data=req.form)
-        prep_req = req.prepare()
-        proxResp = s.send(prep_req)
-    else:
-        print('uh oh')
+    # build our request to pass to X microservice
+    req = requests.Request(req.method, url, cookies=req.cookies, data=req.form)
+    prep_req = req.prepare()
+    prox_resp = s.send(prep_req)
 
-    print(proxResp)
-    return '123'
+    return prox_resp
 
-def isAuthed(sid):
+# simple cache for sid's
+sid_cache = {}
+
+def isAuthed(req):
     # request java api with given sid
-    return True
+    sid = req.cookies.get('sid')
+    if not sid:
+        return False
+    # reduce requests to the auth server
+    # one day have this expire, maybe once the backend db does
+    if sid_cache.get(sid):
+        return True
 
+    url = "http://{}/{}".format(java, "isAuthenticated")
+    resp = requests.post(url, data={'sid': sid})
+    content = resp.json()
+    if content.get('email') == "invalid session":
+        return False
+    sid_cache[sid] = True
+    print('added sid to cache:', sid)
+    return True
 
 ### for debug ###
 def pretty_print_POST(req):
