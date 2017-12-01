@@ -23,3 +23,8 @@ Then install mysqli extension by using an interactive `docker exec` and running 
 The flask stack here is nginx, gunicorn, and obviously flask. The docker compose file will handle all of this. Enter the Follow-Unfollow directory and run:
 
 `docker-compose up`
+
+## Ruby Setup
+Ruby on rails, nginx, and puma stack all with docker compose.
+
+`docker-compose up`
