@@ -3,3 +3,5 @@ Signup-Authentication/.idea/
 Signup-Authentication/*mvn*
 Signup-Authentication/pom.xml
 __pycache__/
+/.vs
+/MYSQL/mysqldata

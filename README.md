@@ -11,3 +11,15 @@ For local dev pull and start the [mysql docker container](https://hub.docker.com
 Where `$PWD` is the Skitter root directory. Mounting a local folder as the MySQL directory will allow easy data persistance.
 Additionally on the first start of the container, run the setup script to create the skitter database, the session table and test user: default_db.sql. 
 This can be done via `docker exec` and the mysql command line or by mounting the sql file to `/docker-entrypoint-initdb.d` as per the dockerhub container instructions.
+
+## PHP setup
+Just run the the command inside the User-Settings folder (add the -d flag to detach):
+
+`docker run -p 80:80 --name php-settings -v $PWD/:/var/www/html php:7.0-apache`
+
+Then install mysqli extension by using an interactive `docker exec` and running `docker-php-ext-install mysqli && docker-php-ext-enable mysqli`
+
+## Flask Setup
+The flask stack here is nginx, gunicorn, and obviously flask. The docker compose file will handle all of this. Enter the Follow-Unfollow directory and run:
+
+`docker-compose up`
