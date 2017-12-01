@@ -31,6 +31,44 @@ def changeDisplayName():
     p_resp = proxy(php, request)
     return create_response(p_resp)
 
+@app.route('/AddSkit', methods=['POST'])
+def addSkit():
+    email = isAuthed(request)
+    if email:
+        # same as args, form data is also immutable
+        request.form = dict(request.form)
+        request.form['author'] = email
+        p_resp = proxy(node, request)
+        return create_response(p_resp)
+    else:
+        return BADUSER
+
+@app.route('/GetSkits', methods=['GET'])
+def GetSkits():
+    email = isAuthed(request)
+    if email:
+        # by default the args are an ImmutableMultiDict
+        request.args = dict(request.args)
+        # add the trusted email parameter
+        # this will overwrite anything provided by the client
+        request.args['email'] = email
+        p_resp = proxy(node, request)
+        return create_response(p_resp)
+    else:
+        return BADUSER
+
+@app.route('/RemoveSkit', methods=['POST'])
+def RemoveSkit():
+    email = True#isAuthed(request)
+    if email:
+        # same as args, form data is also immutable
+        request.form = dict(request.form)
+        request.form['email'] = email
+        p_resp = proxy(node, request)
+        return create_response(p_resp)
+    else:
+        return BADUSER
+
 # just testing auth with the barebones node endpoint
 @app.route('/')
 def test_auth():

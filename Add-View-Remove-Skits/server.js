@@ -8,7 +8,6 @@ const delSkit = require('./doc_del');
 // app setup
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 
 // dummy root route
 app.get('/', function (req, res) {
