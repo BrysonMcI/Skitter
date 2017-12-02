@@ -42,16 +42,35 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-//Prepared statement
-if ($stmt = mysqli_prepare($link, "UPDATE users SET username=? WHERE email=?")){
-	 //Get user they want
-	 $username = $_POST["newUsername"];
-	 //Escape input
-	 if(!mysqli_set_charset($link, "utf8")){
+//Set charset
+if(!mysqli_set_charset($link, "utf8")){
 		http_response_code(500);
 		exit();
+}
+//Get user they want
+$username = $_POST["newUsername"];
+$username = mysqli_real_escape_string($link, $username);
+//Check if their username is taken
+if ($stmt = mysqli_prepare($link, "SELECT username FROM users WHERE username=?")){
+
+	 //Bind parameters
+	 mysqli_stmt_bind_param($stmt, "s", $username);
+	 //Execute
+	 $success = mysqli_stmt_execute($stmt);
+	 //Bind result
+	 mysqli_stmt_bind_result($stmt, $result);
+	 //Fetch
+	 if (mysqli_stmt_fetch($stmt)){
+		echo '{"error": "Duplicate Username"}';
+		exit();
 	 }
-	 $username = mysqli_real_escape_string($link, $username);
+
+}
+
+//Prepared statement
+if ($stmt = mysqli_prepare($link, "UPDATE users SET username=? WHERE email=?")){
+	 
+	 //Escape input
 	 $email = mysqli_real_escape_string($link, $email);
 	 if ($username === NULL || $email === NULL){
 		http_response_code(500);
