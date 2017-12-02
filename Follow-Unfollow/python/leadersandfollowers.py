@@ -5,9 +5,10 @@ app = Flask(__name__)
 
 @app.route('/FollowUser',  methods=['POST'])
 def follow():
-    #replace
-    emailOfFollower = request.form['email']
-    userToFollow = request.form['follow']
+
+    json = request.get_json()
+    emailOfFollower = json['email']
+    userToFollow = json['follow']
 
     if not userToFollow:
         abort(400)
@@ -46,9 +47,10 @@ def follow():
 
 @app.route('/UnfollowUser',  methods=['POST'])
 def unfollow():
-    #replace
-    emailOfFollower = request.form['email']
-    userToUnfollow = request.form['unfollow']
+    
+    json = request.get_json()
+    emailOfFollower = json['email']
+    userToUnfollow = json['unfollow']
 
     if not userToUnfollow:
         abort(400)
