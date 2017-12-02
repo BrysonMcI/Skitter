@@ -9,10 +9,7 @@ services:
     environment:
      - NGINX_PORT=4000
   puma:
-    image: ruby:2.3.1
-    volumes:
-     - ./ruby/:/var/www/
+    build: ./ruby
     ports:
-     - "3000:3000"
-    working_dir: /var/www/
-    command: apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs && gem install bundler && bundle install && bundle exec puma -C config/puma.rb
+     - "9292:9292"
+    command: "bundle exec puma"
