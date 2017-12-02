@@ -3,6 +3,35 @@ from flask import jsonify
 import pymysql as sql
 app = Flask(__name__)
 
+@app.route('/getFollowing',  methods=['GET'])
+def getFollowing():
+    email = request.args.get('email')
+    if not email:
+        abort(400)
+
+    db = sql.connect(host="172.25.238.65",
+                     user="root",
+                     password="password",
+                     db="skitter",
+                     charset='utf8mb4',
+                     cursorclass=sql.cursors.DictCursor)
+
+    try:
+        with db.cursor() as cursor:
+            #Add to followers
+            stmt = "SELECT leader FROM followers WHERE follower = %s"
+            cursor.execute(stmt, (email,))
+            followingEmails = cursor.fetchall()
+
+    except:
+        abort(500)
+    finally:
+        db.close()
+
+
+    followingEmails = [v['leader'] for v in followingEmails]
+    return jsonify(followingEmails)
+
 @app.route('/FollowUser',  methods=['POST'])
 def follow():
 
