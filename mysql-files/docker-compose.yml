@@ -1,0 +1,9 @@
+dev-sql:
+  image: mysql
+  ports:
+    - "3306:3306"
+  volumes:
+    - ./00-skitter.sql:/docker-entrypoint-initdb.d/00-skitter.sql
+    - ./mysqldata:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=password
