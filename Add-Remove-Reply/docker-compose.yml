@@ -1,0 +1,15 @@
+version: '3'
+services:
+  proxy:
+    image: nginx
+    volumes:
+     - ./nginx/:/etc/nginx/
+    ports:
+     - "4000:4000"
+    environment:
+     - NGINX_PORT=4000
+  puma:
+    build: ./ruby
+    ports:
+     - "9292:9292"
+    command: "bundle exec puma"

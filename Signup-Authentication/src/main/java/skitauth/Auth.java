@@ -66,17 +66,11 @@ class Auth {
             Attributes ansr = ctx.getAttributes("uid="+username+", ou=people,dc=rit,dc=edu", attrIDs);
             // janky ldap string parsing
             String email = ansr.get("mail").toString().split("[ ]")[1];
-            String name = ansr.get("displayname").toString();
-            // System.out.println(email);
-            if(name.length() > 2) {
-                name = name.split("[ ]")[1]+ " " + name.split("[ ]")[2];
-            }
-            // System.out.println(name);
 
             // Close the context when we're done
             ctx.close();
             // System.out.println("...connection closed");
-            return new User(name, email);
+            return new User(email);
         } catch (NamingException e) {
             System.out.println("an error occurred: "+e.getMessage());
             return null;
