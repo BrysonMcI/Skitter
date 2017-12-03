@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const addSkit = require('./doc_add');
 const searchSkits = require('./search');
 const delSkit = require('./doc_del');
+const index = require('./createindex');
 
 // app setup
 const app = express();
@@ -26,5 +27,6 @@ app.post('/RemoveSkit', delSkit);
 app.get('/GetSkits', searchSkits);
 
 app.listen(8000, function () {
+  index();
   console.log('node microservice is running on tcp/8000!');
 });
