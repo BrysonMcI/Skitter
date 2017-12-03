@@ -1,0 +1,9 @@
+version: '2'
+services:
+  skitnode:
+    build: .
+    command: node server
+    volumes:
+      - ./js:/src
+    ports:
+      - "8000:8000"

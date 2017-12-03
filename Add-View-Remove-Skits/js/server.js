@@ -25,6 +25,6 @@ app.post('/RemoveSkit', delSkit);
 // get all requested skit feeds
 app.get('/GetSkits', searchSkits);
 
-app.listen(3000, function () {
-  console.log('node microservice is running on tcp/3000!');
+app.listen(8000, function () {
+  console.log('node microservice is running on tcp/8000!');
 });

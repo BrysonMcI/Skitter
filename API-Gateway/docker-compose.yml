@@ -8,11 +8,11 @@ services:
      - "5000:5000"
     environment:
      - NGINX_PORT=5000
+    links:
+     - flask
   flask:
     image: python:3.6.3
     volumes:
      - ./python/:/var/www/
-    ports:
-     - "8080:8080"
     working_dir: /var/www/
     command: bash -c "pip3 install -r requirements.txt && gunicorn -b flask:8080 --worker-class gevent app:APP"

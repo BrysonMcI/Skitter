@@ -5,14 +5,14 @@ services:
     volumes:
      - ./nginx/:/etc/nginx/
     ports:
-     - "3000:3000"
+     - "7000:7000"
     environment:
-     - NGINX_PORT=3000
+     - NGINX_PORT=7000
+    links:
+     - flask
   flask:
     image: python:3.6.3
     volumes:
      - ./python/:/var/www/
-    ports:
-     - "8080:8080"
     working_dir: /var/www/
     command: bash -c "pip3 install -r requirements.txt && gunicorn -b flask:8080 --worker-class gevent wsgi:app"
