@@ -38,9 +38,9 @@ services:
     volumes:
      - ./API-Gateway/nginx/:/etc/nginx/
     ports:
-     - "8080:8080"
+     - "80:80"
     environment:
-     - NGINX_PORT=8080
+     - NGINX_PORT=80
     links:
      - gateway
   gateway:
@@ -55,6 +55,7 @@ services:
      - skitnode
      - puma_proxy
      - php
+     - angular
   skitnode:
     build: ./Add-View-Remove-Skits
     command: node server
@@ -77,3 +78,5 @@ services:
     build: ./User-Settings
     links:
      - prod_sql
+  angular:
+    build: ./Homepage

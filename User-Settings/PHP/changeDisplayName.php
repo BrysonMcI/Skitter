@@ -49,6 +49,10 @@ if(!mysqli_set_charset($link, "utf8")){
 }
 //Get user they want
 $username = $_POST["newUsername"];
+if ($username === ""){
+	http_response_code(400);
+    exit();
+}
 $username = mysqli_real_escape_string($link, $username);
 //Check if their username is taken
 if ($stmt = mysqli_prepare($link, "SELECT username FROM users WHERE username=?")){

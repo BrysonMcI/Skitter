@@ -13,8 +13,8 @@ PHP = 'php:80'
 
 PYTHON = 'flask_proxy:7000'
 
+ANGULAR = 'angular:2000'
+
 SESSION_SECRET = 'testkey12345'
 
 ORIGIN = "localhost"
-
-ANGULAR = "localhost:2000"

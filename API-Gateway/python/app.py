@@ -2,7 +2,7 @@
     module for handingly requests to the skitter microservices
 """
 from flask import Flask, request, make_response
-from config import SESSION_SECRET, NODE, PYTHON, RUBY, JAVA, PHP, ORIGIN
+from config import SESSION_SECRET, NODE, PYTHON, RUBY, JAVA, PHP, ORIGIN, ANGULAR
 from proxy import proxy, is_authed
 
 # this will need to change once we integrate with gunicorn/wsgi
@@ -83,11 +83,13 @@ def remove_skit():
 @APP.route('/')
 def test_auth():
     """ a feature testing endpoint """
-    #if isAuthed(request) and csrf_check(request):
+    p_resp = proxy(ANGULAR, request)
+    return create_response(p_resp)
+    """
     if csrf_check(request):
         p_resp = proxy(NODE, request)
         return create_response(p_resp)
-    return BADUSER
+    """
 
 
 # PHP ROUTES
@@ -133,6 +135,18 @@ def post_change_profile_image():
     return BADUSER
 
 #FLASK ROUTES
+@APP.route('/getFollowing', methods=['GET'])
+def get_following():
+    """ removes a skit if authored by the current user """
+    email = is_authed(request)
+    if email:
+        # same as args, form data is also immutable
+        request.args = dict(request.args)
+        request.args['email'] = email
+        p_resp = proxy(PYTHON, request)
+        return create_response(p_resp)
+    return BADUSER
+
 @APP.route('/FollowUser', methods=['POST'])
 def post_follow_user():
     """ removes a skit if authored by the current user """

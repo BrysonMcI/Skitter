@@ -64,9 +64,8 @@ def getFollowing():
 @app.route('/FollowUser',  methods=['POST'])
 def follow():
 
-    json = request.get_json()
-    emailOfFollower = json['email']
-    userToFollow = json['follow']
+    emailOfFollower = request.form['email']
+    userToFollow = request.form['follow']
 
     if not userToFollow:
         abort(400)
@@ -106,9 +105,8 @@ def follow():
 @app.route('/UnfollowUser',  methods=['POST'])
 def unfollow():
     
-    json = request.get_json()
-    emailOfFollower = json['email']
-    userToUnfollow = json['unfollow']
+    emailOfFollower = request.form['email']
+    userToUnfollow = request.form['unfollow']
 
     if not userToUnfollow:
         abort(400)
