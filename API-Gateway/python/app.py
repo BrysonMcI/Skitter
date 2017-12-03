@@ -88,3 +88,100 @@ def test_auth():
         p_resp = proxy(NODE, request)
         return create_response(p_resp)
     return BADUSER
+
+
+# PHP ROUTES
+@APP.route('/getProfileInformation', methods=['GET'])
+def get_profile_information():
+    """ gets skits from all users the current user follows """
+    email = is_authed(request)
+    if email:
+        # by default the args are an ImmutableMultiDict
+        request.args = dict(request.args)
+        # add the trusted email parameter
+        # this will overwrite anything provided by the client
+        request.args['email'] = email
+        request.path += ".php"
+        p_resp = proxy(PHP, request)
+        return create_response(p_resp)
+    return BADUSER
+
+@APP.route('/changeDisplayName', methods=['POST'])
+def get_profile_information():
+    """ gets skits from all users the current user follows """
+    email = is_authed(request)
+    if email:
+        # by default the args are an ImmutableMultiDict
+        request.args = dict(request.args)
+        # add the trusted email parameter
+        # this will overwrite anything provided by the client
+        request.args['email'] = email
+        request.path += ".php"
+        p_resp = proxy(PHP, request)
+        return create_response(p_resp)
+    return BADUSER
+
+@APP.route('/changeProfileImage', methods=['POST'])
+def get_profile_information():
+    """ gets skits from all users the current user follows """
+    email = is_authed(request)
+    if email:
+        # by default the args are an ImmutableMultiDict
+        request.args = dict(request.args)
+        # add the trusted email parameter
+        # this will overwrite anything provided by the client
+        request.args['email'] = email
+        request.path += ".php"
+        p_resp = proxy(PHP, request)
+        return create_response(p_resp)
+    return BADUSER
+
+#FLASK ROUTES
+@APP.route('/FollowUser', methods=['POST'])
+def remove_skit():
+    """ removes a skit if authored by the current user """
+    email = is_authed(request)
+    if email:
+        # same as args, form data is also immutable
+        request.form = dict(request.form)
+        request.form['email'] = email
+        p_resp = proxy(PYTHON, request)
+        return create_response(p_resp)
+    return BADUSER
+
+@APP.route('/UnfollowUser', methods=['POST'])
+def remove_skit():
+    """ removes a skit if authored by the current user """
+    email = is_authed(request)
+    if email:
+        # same as args, form data is also immutable
+        request.form = dict(request.form)
+        request.form['email'] = email
+        p_resp = proxy(PYTHON, request)
+        return create_response(p_resp)
+    return BADUSER
+
+#RUBY ROUTES
+@APP.route('/FollowUser', methods=['POST'])
+def remove_skit():
+    """ removes a skit if authored by the current user """
+    email = is_authed(request)
+    if email:
+        # same as args, form data is also immutable
+        request.form = dict(request.form)
+        request.form['email'] = email
+        p_resp = proxy(RUBY, request)
+        return create_response(p_resp)
+    return BADUSER
+
+@APP.route('/UnfollowUser', methods=['POST'])
+def remove_skit():
+    """ removes a skit if authored by the current user """
+    email = is_authed(request)
+    if email:
+        # same as args, form data is also immutable
+        request.form = dict(request.form)
+        request.form['email'] = email
+        p_resp = proxy(RUBY, request)
+        return create_response(p_resp)
+    return BADUSER

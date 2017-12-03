@@ -11,7 +11,7 @@ Change into the `mysql-files` directory and run `docker-compose up` to start the
 ## PHP setup
 Just run the the command inside the User-Settings folder (add the -d flag to detach):
 
-`docker run -p 6000:6000 --name php-settings -v $PWD/:/var/www/html php:7.0-apache`
+`docker run -p 80:80 --name php-settings -v $PWD/:/var/www/html php:7.0-apache`
 
 Then install mysqli extension by using an interactive `docker exec` and running `docker-php-ext-install mysqli && docker-php-ext-enable mysqli`
 
