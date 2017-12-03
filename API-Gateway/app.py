@@ -1,79 +1,90 @@
 """
     module for handingly requests to the skitter microservices
 """
-from flask import Flask, request, make_response, session, escape
-from config import session_secret, node, python, ruby, java, php
-from proxy import proxy, isAuthed
+from flask import Flask, request, make_response
+from config import SESSION_SECRET, NODE, PYTHON, RUBY, JAVA, PHP, ORIGIN
+from proxy import proxy, is_authed
 
 # this will need to change once we integrate with gunicorn/wsgi
-app = Flask(__name__)
+APP = Flask(__name__)
 # set secret key for signing session cookies
 # change in production
-app.secret_key = session_secret
+APP.secret_key = SESSION_SECRET
 
 # global unauthorized request
 BADUSER = ('Not signed in!', 403)
+PROPER_ORGIN = ORIGIN
 
-# wrapper method for requests.response to flask.response
 def create_response(prox_resp):
+    """ wrapper method for requests.response to flask.response """
     return make_response((prox_resp.text, dict(prox_resp.headers)))
 
-@app.route('/signin', methods=['POST'])
+def csrf_check(req):
+    """ perform header checks to prevent csrf """
+    valid = 0
+    # first make sure the origin header is correct
+    if req.headers.get('Origin') == PROPER_ORGIN:
+        valid += 1
+    # if it is missing, try checking the referer
+    elif req.headers.get('Referer') == PROPER_ORGIN:
+        valid += 1
+    # finally check for the javascript header
+    if req.headers.get('X-Requested-With') == "XMLHttpRequest":
+        valid += 1
+    return valid > 1
+
+@APP.route('/signin', methods=['POST'])
 def login():
-    p_resp = proxy(java, request)
+    """ proxies a request to the auth server,
+    also replaces bad java header """
+    p_resp = proxy(JAVA, request)
     p_resp.headers['Transfer-Encoding'] = 'X-skitter-java-is-bad'
     return create_response(p_resp)
 
-# needs testing
-@app.route('/changeDisplayName', methods=['POST'])
-def changeDisplayName():
-    # some auth check first
-    p_resp = proxy(php, request)
-    return create_response(p_resp)
-
-@app.route('/AddSkit', methods=['POST'])
-def addSkit():
-    email = isAuthed(request)
+@APP.route('/AddSkit', methods=['POST'])
+def add_skit():
+    """ adds a skit as the currently logged in user """
+    email = is_authed(request)
     if email:
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['author'] = email
-        p_resp = proxy(node, request)
+        p_resp = proxy(NODE, request)
         return create_response(p_resp)
-    else:
-        return BADUSER
+    return BADUSER
 
-@app.route('/GetSkits', methods=['GET'])
-def GetSkits():
-    email = isAuthed(request)
+@APP.route('/GetSkits', methods=['GET'])
+def get_skits():
+    """ gets skits from all users the current user follows """
+    email = is_authed(request)
     if email:
         # by default the args are an ImmutableMultiDict
         request.args = dict(request.args)
         # add the trusted email parameter
         # this will overwrite anything provided by the client
         request.args['email'] = email
-        p_resp = proxy(node, request)
+        p_resp = proxy(NODE, request)
         return create_response(p_resp)
-    else:
-        return BADUSER
+    return BADUSER
 
-@app.route('/RemoveSkit', methods=['POST'])
-def RemoveSkit():
-    email = True#isAuthed(request)
+@APP.route('/RemoveSkit', methods=['POST'])
+def remove_skit():
+    """ removes a skit if authored by the current user """
+    email = is_authed(request)
     if email:
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['email'] = email
-        p_resp = proxy(node, request)
+        p_resp = proxy(NODE, request)
         return create_response(p_resp)
-    else:
-        return BADUSER
+    return BADUSER
 
 # just testing auth with the barebones node endpoint
-@app.route('/')
+@APP.route('/')
 def test_auth():
-    if isAuthed(request):
-        p_resp = proxy(node, request)
+    """ a feature testing endpoint """
+    #if isAuthed(request) and csrf_check(request):
+    if csrf_check(request):
+        p_resp = proxy(NODE, request)
         return create_response(p_resp)
-    else:
-        return BADUSER
+    return BADUSER
