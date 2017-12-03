@@ -5,3 +5,5 @@ Signup-Authentication/pom.xml
 __pycache__/
 /.vs
 /MYSQL/mysqldata
+/MYSQL/mysql-data
+/Add-View-Remove-Skits/package-lock.json

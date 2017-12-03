@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
  
-  post 'replies/addreply'
+  post 'replies/addskitreply'
 
-  post 'replies/removereply'
+  post 'replies/removeskitreply'
 
 
 end

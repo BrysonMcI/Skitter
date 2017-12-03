@@ -5,9 +5,7 @@ services:
     volumes:
      - ./nginx/:/etc/nginx/
     ports:
-     - "4000:4000"
-    environment:
-     - NGINX_PORT=4000
+     - "9000:9000"
   puma:
     build: ./ruby
     ports:
