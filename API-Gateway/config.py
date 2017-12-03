@@ -3,14 +3,16 @@
     And any other global config
 """
 
-node = 'localhost:3000'
+NODE = 'localhost:3000'
 
-ruby = 'localhost:9000'
+RUBY = 'localhost:9000'
 
-java = 'localhost:8080'
+JAVA = 'localhost:8080'
 
-php = 'localhost:6000'
+PHP = 'localhost:6000'
 
-python = 'localhost:7000'
+PYTHON = 'localhost:7000'
 
-session_secret = 'testkey12345'
+SESSION_SECRET = 'testkey12345'
+
+ORIGIN = "localhost"
