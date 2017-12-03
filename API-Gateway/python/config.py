@@ -3,7 +3,7 @@
     And any other global config
 """
 
-NODE = 'localhost:3000'
+NODE = '10.10.208.196:3000'
 
 RUBY = 'localhost:9000'
 

@@ -27,3 +27,6 @@ Ruby on rails, nginx, and puma stack all with docker compose.
 
 ## ElasticSearch setup
 Navigate to the `elk-files` directory and run the `fix_mmap.sh` script to allow more memory for the elk container. Then simply run `docker-compose up` to start up an ELK stack.
+
+## API Gateway
+The API Gateway is a custom proxy that will serve as a public face of the Skitter web application. All requests to any endpoint will be made to the gateway, which will then forward valid requests to the respective microservice. To run, simple issue `docker-compose up` from the `API-Gateway` folder.
