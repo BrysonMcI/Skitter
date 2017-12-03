@@ -79,19 +79,6 @@ def remove_skit():
         return create_response(p_resp)
     return BADUSER
 
-# WILL BECOME ANGULAR
-@APP.route('/')
-def test_auth():
-    """ a feature testing endpoint """
-    p_resp = proxy(ANGULAR, request)
-    return create_response(p_resp)
-    """
-    if csrf_check(request):
-        p_resp = proxy(NODE, request)
-        return create_response(p_resp)
-    """
-
-
 # PHP ROUTES
 @APP.route('/getProfileInformation', methods=['GET'])
 def get_profile_information():
@@ -204,3 +191,16 @@ def post_remove_skit_reply():
         p_resp = proxy(RUBY, request)
         return create_response(p_resp)
     return BADUSER
+
+#ANGULAR
+@APP.route('/', defaults={'path': ''})
+@APP.route('/<path:path>')
+def get_angular(path):
+    """ a feature testing endpoint """
+    p_resp = proxy(ANGULAR, request)
+    return create_response(p_resp)
+    """
+    if csrf_check(request):
+        p_resp = proxy(NODE, request)
+        return create_response(p_resp)
+    """
