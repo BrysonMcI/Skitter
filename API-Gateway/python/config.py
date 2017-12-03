@@ -16,3 +16,5 @@ PYTHON = 'flask_proxy:7000'
 SESSION_SECRET = 'testkey12345'
 
 ORIGIN = "localhost"
+
+ANGULAR = "localhost:2000"
