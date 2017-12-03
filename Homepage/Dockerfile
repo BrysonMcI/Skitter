@@ -1,6 +1,6 @@
 ### STAGE 1: Build ###
 
-# We label our stage as ‘builder’
+# We label our stage as ï¿½builderï¿½
 FROM node:8.1.4-alpine as builder
 
 COPY ./SkitterFrontend/package.json ./SkitterFrontend/package-lock.json ./
@@ -20,12 +20,12 @@ RUN $(npm bin)/ng build --prod
 FROM nginx:1.13.3-alpine
 
 ## Copy our default nginx config
-COPY nginx/default.conf /etc/nginx/conf.d/
+COPY nginx/nginx.conf /etc/nginx/conf.d/
 
 ## Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
-## From ‘builder’ stage copy over the artifacts in dist folder to default nginx public folder
-COPY --from=builder /ng-app/dist /usr/share/nginx/html
+## From ï¿½builderï¿½ stage copy over the artifacts in dist folder to default nginx public folder
+COPY --from=builder /SkitterFrontend/dist /usr/share/nginx/html
 
 CMD ["nginx", "-g", "daemon off;"]
