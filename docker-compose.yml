@@ -57,8 +57,9 @@ services:
      - php
      - angular
   skitnode:
-    build: ./Add-View-Remove-Skits
-    command: node server
+    image: node
+    working_dir: /src
+    command: bash -c "npm install --quiet; node server"
     volumes:
       - ./Add-View-Remove-Skits/js:/src
     links:
