@@ -5,7 +5,7 @@ class DBConnector {
     //STEP 1. Import required packages
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/skitter";
+    static final String DB_URL = "jdbc:mysql://"+System.getenv("MYSQL_LOC")+"/skitter";
 
     //  Database credentials
     static final String USER = "root";
@@ -21,7 +21,7 @@ class DBConnector {
             Class.forName("com.mysql.jdbc.Driver");
 
             //STEP 3: Open a connection
-            System.out.println("Connecting to database...");
+            System.out.printf("Connecting to database at %s\n", DB_URL);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             //STEP 4: Execute a query
