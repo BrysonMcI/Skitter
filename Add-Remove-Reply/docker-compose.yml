@@ -6,8 +6,8 @@ services:
      - ./nginx/:/etc/nginx/
     ports:
      - "9000:9000"
+    links:
+     - puma
   puma:
     build: ./ruby
-    ports:
-     - "9292:9292"
     command: "bundle exec puma"
