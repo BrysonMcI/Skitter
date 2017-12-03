@@ -64,9 +64,8 @@ def get_skits():
         # add the trusted email parameter
         # this will overwrite anything provided by the client
         followers = pyget("http://{}/getFollowing".format(PYTHON),
-                          params={"email": "test@test.com"});
-        print(followers.json())
-        request.args['email'] = email
+                          params={"email": email})
+        request.args['following'] = followers.text
         p_resp = proxy(NODE, request)
         return create_response(p_resp)
     return BADUSER
