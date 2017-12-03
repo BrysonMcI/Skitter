@@ -1,5 +1,7 @@
 <?php
  
+mysqlpaswd = $_ENV["MYSQL_ROOT_PASSWORD"]
+
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
   
@@ -10,31 +12,13 @@ if ($method !== 'POST') {
 	exit();
 }
 
-// Check Auth
-//Did they come from skitter? (Env variable?)
-/*
-if (!isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] !== "superskitter.com"){
-	http_response_code(403);
-	exit();
-}
-*/
-//Do they have a valid SessionID
-if(!isset($_COOKIE["sid"])){
-	http_response_code(403);
-	exit();
-}
-else{
-	//Make request to /isAuthenticated
-	
-	//Is auth will reply with this in the future
-	$email = "test@test.org";
-}
+$email = $_POST["email"]
 
 //They are Authed
 
 // connect to the mysql database
 // TODO ENV VARIABLES OR SOMETHING BETTER
-$link = mysqli_connect("prod_sql", "root", "password", "skitter");
+$link = mysqli_connect("prod_sql", "root", mysqlpaswd, "skitter");
 
 //Check connection
 if (mysqli_connect_errno()) {

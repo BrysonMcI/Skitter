@@ -17,7 +17,7 @@ PROPER_ORGIN = ORIGIN
 
 def create_response(prox_resp):
     """ wrapper method for requests.response to flask.response """
-    return make_response((prox_resp.text, dict(prox_resp.headers)))
+    return make_response((prox_resp.text, prox_resp.status_code, dict(prox_resp.headers)))
 
 def csrf_check(req):
     """ perform header checks to prevent csrf """
@@ -45,7 +45,7 @@ def login():
 def add_skit():
     """ adds a skit as the currently logged in user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['author'] = email
@@ -57,7 +57,7 @@ def add_skit():
 def get_skits():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # by default the args are an ImmutableMultiDict
         request.args = dict(request.args)
         # add the trusted email parameter
@@ -71,7 +71,7 @@ def get_skits():
 def remove_skit():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['email'] = email
@@ -84,8 +84,7 @@ def remove_skit():
 def get_profile_information():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
-    if email:
-        # this will overwrite anything provided by the client
+    if email and csrf_check(request):
         request.path += ".php"
         p_resp = proxy(PHP, request)
         return create_response(p_resp)
@@ -95,12 +94,12 @@ def get_profile_information():
 def post_change_display_name():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # by default the args are an ImmutableMultiDict
-        request.args = dict(request.args)
+        request.form = dict(request.form)
         # add the trusted email parameter
         # this will overwrite anything provided by the client
-        request.args['email'] = email
+        request.form['email'] = email
         request.path += ".php"
         p_resp = proxy(PHP, request)
         return create_response(p_resp)
@@ -110,12 +109,12 @@ def post_change_display_name():
 def post_change_profile_image():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # by default the args are an ImmutableMultiDict
-        request.args = dict(request.args)
+        request.form = dict(request.form)
         # add the trusted email parameter
         # this will overwrite anything provided by the client
-        request.args['email'] = email
+        request.form['email'] = email
         request.path += ".php"
         p_resp = proxy(PHP, request)
         return create_response(p_resp)
@@ -126,7 +125,7 @@ def post_change_profile_image():
 def get_following():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # same as args, form data is also immutable
         request.args = dict(request.args)
         request.args['email'] = email
@@ -138,7 +137,7 @@ def get_following():
 def post_follow_user():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['email'] = email
@@ -150,7 +149,7 @@ def post_follow_user():
 def post_unfollow_user():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['email'] = email
@@ -162,7 +161,7 @@ def post_unfollow_user():
 def get_user_search():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         p_resp = proxy(PYTHON, request)
         return create_response(p_resp)
     return BADUSER
@@ -172,7 +171,7 @@ def get_user_search():
 def post_add_skit_reply():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['email'] = email
@@ -184,7 +183,7 @@ def post_add_skit_reply():
 def post_remove_skit_reply():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
-    if email:
+    if email and csrf_check(request):
         # same as args, form data is also immutable
         request.form = dict(request.form)
         request.form['email'] = email
@@ -196,11 +195,5 @@ def post_remove_skit_reply():
 @APP.route('/', defaults={'path': ''})
 @APP.route('/<path:path>')
 def get_angular(path):
-    """ a feature testing endpoint """
     p_resp = proxy(ANGULAR, request)
     return create_response(p_resp)
-    """
-    if csrf_check(request):
-        p_resp = proxy(NODE, request)
-        return create_response(p_resp)
-    """

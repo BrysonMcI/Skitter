@@ -33,6 +33,8 @@ services:
     command: bash -c "pip3 install -r requirements.txt && gunicorn -b flask:8080 --worker-class gevent wsgi:app"
     links:
       - prod_sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
   gateway_proxy:
     image: nginx
     volumes:
@@ -79,5 +81,7 @@ services:
     build: ./User-Settings
     links:
      - prod_sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
   angular:
     build: ./Homepage

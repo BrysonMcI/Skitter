@@ -1,7 +1,10 @@
 from flask import Flask, request, abort
 from flask import jsonify
 import pymysql as sql
+import os
 app = Flask(__name__)
+
+
 
 @app.route('/UserSearch', methods=['GET'])
 def user_search():
@@ -11,7 +14,7 @@ def user_search():
 
     db = sql.connect(host="prod_sql",
                      user="root",
-                     password="password",
+                     password=os.environ['MYSQL_ROOT_PASSWORD'],
                      db="skitter",
                      charset='utf8mb4',
                      cursorclass=sql.cursors.DictCursor)
@@ -40,7 +43,7 @@ def getFollowing():
 
     db = sql.connect(host="prod_sql",
                      user="root",
-                     password="password",
+                     password=os.environ['MYSQL_ROOT_PASSWORD'],
                      db="skitter",
                      charset='utf8mb4',
                      cursorclass=sql.cursors.DictCursor)
@@ -73,7 +76,7 @@ def follow():
     #more replacing with env variables
     db = sql.connect(host="prod_sql",
                      user="root",
-                     password="password",
+                     password=os.environ['MYSQL_ROOT_PASSWORD'],
                      db="skitter",
                      charset='utf8mb4',
                      cursorclass=sql.cursors.DictCursor)
@@ -114,7 +117,7 @@ def unfollow():
     #more replacing with env variables
     db = sql.connect(host="prod_sql",
                      user="root",
-                     password="password",
+                     password=os.environ['MYSQL_ROOT_PASSWORD'],
                      db="skitter",
                      charset='utf8mb4',
                      cursorclass=sql.cursors.DictCursor)
