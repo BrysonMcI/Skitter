@@ -6,11 +6,7 @@ You are charged with developing a heavily user-centric web application. This web
 ## MySQL setup
 For local dev pull and start the [mysql docker container](https://hub.docker.com/_/mysql/) and run with:
 
-`docker run --name dev-sql -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -v $PWD/mysql-data:/var/lib/mysql -v $PWD/00-skitter.sql:/docker-entrypoint-initdb.d/00-skitter.sql mysql`
-
-Where `$PWD` is the Skitter root directory. Mounting a local folder as the MySQL directory will allow easy data persistance.
-Additionally on the first start of the container, run the setup script to create the skitter database, the session table and test user: default_db.sql. 
-This can be done via `docker exec` and the mysql command line or by mounting the sql file to `/docker-entrypoint-initdb.d` as per the dockerhub container instructions.
+Change into the `mysql-files` directory and run `docker-compose up` to start the database container. The first run will initialize some sample data into the database as well as mount the sql db to the local filesystem (please do not commit these into Git).
 
 ## PHP setup
 Just run the the command inside the User-Settings folder (add the -d flag to detach):
@@ -28,3 +24,6 @@ The flask stack here is nginx, gunicorn, and obviously flask. The docker compose
 Ruby on rails, nginx, and puma stack all with docker compose.
 
 `docker-compose build ; docker-compose up`
+
+## ElasticSearch setup
+Navigate to the `elk-files` directory and run the `fix_mmap.sh` script to allow more memory for the elk container. Then simply run `docker-compose up` to start up an ELK stack.
