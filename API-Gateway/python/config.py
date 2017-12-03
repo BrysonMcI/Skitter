@@ -9,7 +9,7 @@ RUBY = 'localhost:9000'
 
 JAVA = 'localhost:8080'
 
-PHP = 'localhost:6000'
+PHP = 'localhost:80'
 
 PYTHON = 'localhost:7000'
 
