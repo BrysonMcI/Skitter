@@ -1,6 +1,6 @@
 version: '3'
 services:
-  proxy:
+  puma_proxy:
     image: nginx
     volumes:
      - ./nginx/:/etc/nginx/

@@ -79,7 +79,7 @@ def remove_skit():
         return create_response(p_resp)
     return BADUSER
 
-# just testing auth with the barebones node endpoint
+# WILL BECOME ANGULAR
 @APP.route('/')
 def test_auth():
     """ a feature testing endpoint """
@@ -96,18 +96,14 @@ def get_profile_information():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
     if email:
-        # by default the args are an ImmutableMultiDict
-        request.args = dict(request.args)
-        # add the trusted email parameter
         # this will overwrite anything provided by the client
-        request.args['email'] = email
         request.path += ".php"
         p_resp = proxy(PHP, request)
         return create_response(p_resp)
     return BADUSER
 
 @APP.route('/changeDisplayName', methods=['POST'])
-def get_profile_information():
+def post_change_display_name():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
     if email:
@@ -122,7 +118,7 @@ def get_profile_information():
     return BADUSER
 
 @APP.route('/changeProfileImage', methods=['POST'])
-def get_profile_information():
+def post_change_profile_image():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
     if email:
@@ -138,7 +134,7 @@ def get_profile_information():
 
 #FLASK ROUTES
 @APP.route('/FollowUser', methods=['POST'])
-def remove_skit():
+def post_follow_user():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
     if email:
@@ -150,7 +146,7 @@ def remove_skit():
     return BADUSER
 
 @APP.route('/UnfollowUser', methods=['POST'])
-def remove_skit():
+def post_unfollow_user():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
     if email:
@@ -161,9 +157,18 @@ def remove_skit():
         return create_response(p_resp)
     return BADUSER
 
+@APP.route('/UserSearch', methods=['GET'])
+def get_user_search():
+    """ removes a skit if authored by the current user """
+    email = is_authed(request)
+    if email:
+        p_resp = proxy(PYTHON, request)
+        return create_response(p_resp)
+    return BADUSER
+
 #RUBY ROUTES
-@APP.route('/FollowUser', methods=['POST'])
-def remove_skit():
+@APP.route('/addSkitReply', methods=['POST'])
+def post_add_skit_reply():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
     if email:
@@ -174,8 +179,8 @@ def remove_skit():
         return create_response(p_resp)
     return BADUSER
 
-@APP.route('/UnfollowUser', methods=['POST'])
-def remove_skit():
+@APP.route('/removeSkitReply', methods=['POST'])
+def post_remove_skit_reply():
     """ removes a skit if authored by the current user """
     email = is_authed(request)
     if email:

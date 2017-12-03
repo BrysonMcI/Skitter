@@ -3,15 +3,15 @@
     And any other global config
 """
 
-NODE = '10.10.208.196:8000'
+NODE = 'skitnode:8000'
 
-RUBY = 'localhost:9000'
+RUBY = 'puma_proxy:9000'
 
-JAVA = 'localhost:8080'
+JAVA = 'auth:8080'
 
-PHP = 'localhost:80'
+PHP = 'php:80'
 
-PYTHON = 'localhost:7000'
+PYTHON = 'flask_proxy:7000'
 
 SESSION_SECRET = 'testkey12345'
 

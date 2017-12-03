@@ -1,6 +1,6 @@
 version: '3'
 services:
-  proxy:
+  gateway_proxy:
     image: nginx
     volumes:
      - ./nginx/:/etc/nginx/
@@ -9,10 +9,10 @@ services:
     environment:
      - NGINX_PORT=80
     links:
-     - flask
-  flask:
+     - gateway
+  gateway:
     image: python:3.6.3
     volumes:
      - ./python/:/var/www/
     working_dir: /var/www/
-    command: bash -c "pip3 install -r requirements.txt && gunicorn -b flask:8080 --worker-class gevent app:APP"
+    command: bash -c "pip3 install -r requirements.txt && gunicorn -b gateway:8080 --worker-class gevent app:APP"

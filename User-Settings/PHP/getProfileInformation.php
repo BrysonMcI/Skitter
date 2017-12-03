@@ -32,7 +32,7 @@ else{
 
 // connect to the mysql database
 // TODO ENV VARIABLES OR SOMETHING BETTER
-$link = mysqli_connect("172.17.0.2", "root", "password", "skitter");
+$link = mysqli_connect("prod_sql", "root", "password", "skitter");
 
 //Check connection
 if (mysqli_connect_errno()) {

@@ -1,0 +1,79 @@
+version: '3'
+services:
+  auth:
+    build: ./Signup-Authentication
+    environment:
+      - "MYSQL_LOC=prod_sql"
+  prod_sql:
+    image: mysql
+    volumes:
+      - ./mysql-files/00-skitter.sql:/docker-entrypoint-initdb.d/00-skitter.sql
+      - ./mysql-files/mysqldata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+  prod_elk:
+    image: sebp/elk
+    environment:
+      - ELASTICSEARCH_START= 1
+      - LOGSTASH_START=0
+      - KIBANA_START=1
+  flask_proxy:
+    image: nginx
+    volumes:
+     - ./Follow-Unfollow/nginx/:/etc/nginx/
+    environment:
+     - NGINX_PORT=7000
+    links:
+     - flask
+  flask:
+    image: python:3.6.3
+    volumes:
+     - ./Follow-Unfollow/python/:/var/www/
+    working_dir: /var/www/
+    command: bash -c "pip3 install -r requirements.txt && gunicorn -b flask:8080 --worker-class gevent wsgi:app"
+    links:
+      - prod_sql
+  gateway_proxy:
+    image: nginx
+    volumes:
+     - ./API-Gateway/nginx/:/etc/nginx/
+    ports:
+     - "8080:8080"
+    environment:
+     - NGINX_PORT=8080
+    links:
+     - gateway
+  gateway:
+    image: python:3.6.3
+    volumes:
+     - ./API-Gateway/python/:/var/www/
+    working_dir: /var/www/
+    command: bash -c "pip3 install -r requirements.txt && gunicorn -b gateway:8080 --worker-class gevent app:APP"
+    links:
+     - auth
+     - flask_proxy
+     - skitnode
+     - puma_proxy
+     - php
+  skitnode:
+    build: ./Add-View-Remove-Skits
+    command: node server
+    volumes:
+      - ./Add-View-Remove-Skits/js:/src
+    links:
+      - prod_elk
+  puma_proxy:
+    image: nginx
+    volumes:
+     - ./Add-Remove-Reply/nginx/:/etc/nginx/
+    links:
+     - puma
+  puma:
+    build: ./Add-Remove-Reply/ruby
+    command: "bundle exec puma"
+    links:
+     - prod_elk
+  php:
+    build: ./User-Settings
+    links:
+     - prod_sql
