@@ -29,7 +29,10 @@ var addSkit = function(req, res) {
 		body: {
 				"author": author,
 				"content": content,
-				"timestamp": new Date()
+				"timestamp": new Date(),
+				join_type: {
+					"name": "top_level"
+				}
 			}
 		}, function(err,resp,status) {
 			if(err) {
