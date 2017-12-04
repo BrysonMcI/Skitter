@@ -17,4 +17,6 @@ ANGULAR = 'angular:2000'
 
 SESSION_SECRET = 'testkey12345'
 
-ORIGIN = "localhost"
+ORIGIN = "http://localhost"
+
+REFERER = "http://localhost/"

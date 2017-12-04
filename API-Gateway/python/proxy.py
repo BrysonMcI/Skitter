@@ -10,7 +10,7 @@ def proxy(service, req):
     url = "http://{}{}".format(service, req.path)
     sess = requests.Session()
     # build our request to pass to X microservice
-    req = requests.Request(req.method, url, cookies=req.cookies, data=req.form, params=req.args)
+    req = requests.Request(req.method, url, cookies=req.cookies, data=req.form, files=req.files, params=req.args)
     prep_req = req.prepare()
     prox_resp = sess.send(prep_req)
 

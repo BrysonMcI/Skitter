@@ -1,3 +1,8 @@
-<p>
-  new-skit works!
-</p>
+<div>
+  <h3>Post New Skit</h3>
+  <form (ngSubmit)="submitSkit()">
+    <textarea id="content" (change)="contentChange($event)" rows="3" cols="50">
+    </textarea>
+    <input type="submit" />
+  </form>
+</div>

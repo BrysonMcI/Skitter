@@ -1,12 +1,19 @@
-<div>
+<div *ngIf="loggedIn">
   <div>
     <app-feed></app-feed>
-    <app-profile></app-profile>
   </div>
   <div>
     <app-search></app-search>
-    <app-your-profile></app-your-profile>
+    <app-your-profile
+     [user]="user">
+    </app-your-profile>
     <app-new-skit></app-new-skit>
   </div>
 </div>
-
+<div *ngIf="!loggedIn">
+  <form (ngSubmit)="login()">
+    <input type="text" placeholder="RIT DCE" id="username" name="username" [(ngModel)]="loginData.username"/>
+    <input type="password" placeholder="Password" id="password" name="password" [(ngModel)]="loginData.password" />
+    <input type="submit" />
+  </form>
+</div>
