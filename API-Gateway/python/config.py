@@ -20,3 +20,4 @@ SESSION_SECRET = 'testkey12345'
 ORIGIN = "http://localhost"
 
 REFERER = "http://localhost/"
+

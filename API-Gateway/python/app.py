@@ -4,6 +4,7 @@
 from flask import Flask, request, make_response
 from config import SESSION_SECRET, NODE, PYTHON, RUBY, JAVA, PHP, ORIGIN, ANGULAR, REFERER
 from proxy import proxy, is_authed
+from requests import get as pyget
 
 # this will need to change once we integrate with gunicorn/wsgi
 APP = Flask(__name__)
@@ -64,7 +65,9 @@ def get_skits():
         request.args = dict(request.args)
         # add the trusted email parameter
         # this will overwrite anything provided by the client
-        request.args['email'] = email
+        followers = pyget("http://{}/getFollowing".format(PYTHON),
+                          params={"email": email})
+        request.args['following'] = followers.text
         p_resp = proxy(NODE, request)
         return create_response(p_resp)
     return BADUSER
