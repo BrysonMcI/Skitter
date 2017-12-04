@@ -20,7 +20,7 @@ export class YourProfileComponent {
 
   constructor(private YourProfileService: YourProfileService, private sanitizer: DomSanitizer) { }
 
-  submit() {
+  submitProfile() {
     this.edit = false;
     if (this.newUserData.username !== this.user.username) {
       this.YourProfileService.changeDisplayName(this.newUserData.username)

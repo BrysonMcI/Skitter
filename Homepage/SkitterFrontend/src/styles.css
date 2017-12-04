@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+
+body {
+  background-color: lightslategray;
+}
+* {
+  margin-left: auto;
+  margin-top: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  text-align: center;
+  align-content: center;
+  display: inline-block;
+}
+div{
+  padding: .5em;
+  background-color: darkslateblue;
+  display: block;
+}

@@ -20,7 +20,7 @@ export class NewSkitComponent implements OnInit {
     this.maxChar = 140;
   }
 
-  submitSkit() {
+  postTheSkit() {
     var content = this.newSkitContent;
     if (content.length > this.maxChar) {
       alert("Your skit is " + (content.length - this.maxChar).toString() + " characters too long!!");
@@ -28,6 +28,9 @@ export class NewSkitComponent implements OnInit {
     else {
       this.NewSkitService.submitNewSkit(content)
         .then();
+      this.newSkitContent = ""
+      var box = (<HTMLInputElement>document.getElementById("newskitcontent"));
+      box.value = "";
     }
   }
 

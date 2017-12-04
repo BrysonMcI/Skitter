@@ -32,7 +32,7 @@ if(!mysqli_set_charset($link, "utf8")){
 }
 //Get user they want
 $username = $_POST["newUsername"];
-if ($username === ""){
+if (!isset($_POST["newUsername"])){
 	http_response_code(400);
     exit();
 }

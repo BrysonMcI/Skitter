@@ -1,3 +1,9 @@
-<p>
-  feed works!
-</p>
+<div *ngIf="feed.success === 'true'">
+  <div *ngFor="let skit of feed.skits">
+    <span>Author: {{skit.author}}</span>
+    <span>Skit: {{skit.content}}</span>
+  </div>
+</div>
+<div *ngIf="feed.success !== 'true'">
+  <h1>No feed to display</h1>
+</div>

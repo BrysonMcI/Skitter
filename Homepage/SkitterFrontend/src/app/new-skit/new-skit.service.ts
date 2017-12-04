@@ -11,7 +11,7 @@ export class NewSkitService {
     var headers = new Headers();
     headers.set('Content-Type', 'application/x-www-form-urlencoded')
     headers.set('X-Requested-With', 'XMLHttpRequest')
-    return this.http.post('/changeDisplayName', this.formatData({ "content": newSkit }), { headers: headers })
+    return this.http.post('/AddSkit', this.formatData({ "content": newSkit }), { headers: headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleError);
