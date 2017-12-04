@@ -1,3 +1,8 @@
-<p>
-  search works!
-</p>
+<form name="userSearching">
+  <input type="text" placeholder="Search" id="searchString" name="searchString" [(ngModel)]="searchString.string" />
+  <button id="findusers" name="findusers" type="button" (click)="searchForUsers()">Search</button>
+</form>
+<div *ngFor="let user of possibleUsers">
+  <button *ngIf="currentFollowing.indexOf(user) === -1" id="followuser" name="followuser" type="button" (click)="followUser(user)" value="{{user}}">Follow {{user}}</button>
+  <button *ngIf="currentFollowing.indexOf(user) !== -1" id="unfollowuser" name="unfollowuser" type="button" (click)="unfollowUser(user)" value="{{user}}">Unfollow {{user}}</button>
+</div>
