@@ -1,6 +1,6 @@
 <?php
- 
-mysqlpaswd = $_ENV["MYSQL_ROOT_PASSWORD"]
+
+$mysqlpaswd = $_ENV["MYSQL_ROOT_PASSWORD"];
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
@@ -12,13 +12,13 @@ if ($method !== 'POST') {
 	exit();
 }
 
-$email = $_POST["email"]
+$email = $_POST["email"];
 
 //They are Authed
 
 // connect to the mysql database
 // TODO ENV VARIABLES OR SOMETHING BETTER
-$link = mysqli_connect("prod_sql", "root", mysqlpaswd, "skitter");
+$link = mysqli_connect("prod_sql", "root", $mysqlpaswd, "skitter");
 
 //Check connection
 if (mysqli_connect_errno()) {
@@ -32,7 +32,7 @@ if ($stmt = mysqli_prepare($link, "UPDATE users SET photo=? WHERE email=?")){
 	 $filename = $_FILES['photo']['name'];
 	 $filedata = $_FILES['photo']['tmp_name'];
 	 $filesize = $_FILES['photo']['size'];
-	 
+
 	 $blob = base64_encode(fread(fopen($filedata, 'rb'), 16000000));
 
 	 $finfo = new finfo(FILEINFO_MIME_TYPE);

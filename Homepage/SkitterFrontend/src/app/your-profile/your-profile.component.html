@@ -1,3 +1,14 @@
-<p>
-  your-profile works!
-</p>
+<div *ngIf="!edit">
+  <img *ngIf="photoURLSafe" [src]="photoURLSafe">
+  <p>Username: {{newUserData.username}}</p>
+  <p>Email: {{newUserData.email}}</p>
+  <button (click)="edit=!edit">Edit</button>
+</div>
+<div *ngIf="edit">
+  <form (ngSubmit)="submit()">
+    <input type="text" placeholder="{{newUserData.username}}" id="username" name="username" [(ngModel)]="newUserData.username" />
+    <p>Update Picture:</p><input enctype="multipart/form-data" type="file" name="picture"/>
+    <input type="submit" />
+  </form>
+  <button (click)="edit=!edit">Cancel</button>
+</div>

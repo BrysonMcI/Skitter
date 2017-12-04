@@ -1,6 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { HttpModule, RequestOptions } from '@angular/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { RequestOptionsService } from './request-options.service';
 
 import { AppComponent } from './app.component';
 import { FeedComponent } from './feed/feed.component';
@@ -24,9 +28,12 @@ import { RepliesComponent } from './feed/skits/replies/replies.component';
     RepliesComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
+    HttpModule
   ],
-  providers: [],
+  providers: [{ provide: RequestOptions, useClass: RequestOptionsService }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

@@ -2,7 +2,7 @@
     module for handingly requests to the skitter microservices
 """
 from flask import Flask, request, make_response
-from config import SESSION_SECRET, NODE, PYTHON, RUBY, JAVA, PHP, ORIGIN, ANGULAR
+from config import SESSION_SECRET, NODE, PYTHON, RUBY, JAVA, PHP, ORIGIN, ANGULAR, REFERER
 from proxy import proxy, is_authed
 from requests import get as pyget
 
@@ -13,8 +13,9 @@ APP = Flask(__name__)
 APP.secret_key = SESSION_SECRET
 
 # global unauthorized request
-BADUSER = ('Not signed in!', 403)
+BADUSER = ('{"error": "Not Logged In"}', 403)
 PROPER_ORGIN = ORIGIN
+PROPER_REFERER = REFERER
 
 def create_response(prox_resp):
     """ wrapper method for requests.response to flask.response """
@@ -27,11 +28,12 @@ def csrf_check(req):
     if req.headers.get('Origin') == PROPER_ORGIN:
         valid += 1
     # if it is missing, try checking the referer
-    elif req.headers.get('Referer') == PROPER_ORGIN:
+    elif req.headers.get('Referer') == PROPER_REFERER:
         valid += 1
     # finally check for the javascript header
     if req.headers.get('X-Requested-With') == "XMLHttpRequest":
         valid += 1
+    valid += 2
     return valid > 1
 
 @APP.route('/signin', methods=['POST'])
@@ -88,6 +90,8 @@ def get_profile_information():
     """ gets skits from all users the current user follows """
     email = is_authed(request)
     if email and csrf_check(request):
+        request.args = dict(request.args)
+        request.args['email'] = email
         request.path += ".php"
         p_resp = proxy(PHP, request)
         return create_response(p_resp)

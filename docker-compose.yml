@@ -8,7 +8,6 @@ services:
     image: mysql
     volumes:
       - ./mysql-files/00-skitter.sql:/docker-entrypoint-initdb.d/00-skitter.sql
-      - ./mysql-files/mysqldata:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
   prod_elk:

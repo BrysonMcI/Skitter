@@ -1,6 +1,7 @@
 <?php
- 
-mysqlpaswd = $_ENV["MYSQL_ROOT_PASSWORD"]
+//Get env variable
+$mysqlpaswd = $_ENV["MYSQL_ROOT_PASSWORD"];
+
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
@@ -13,7 +14,7 @@ if ($method !== 'GET') {
 }
 
 // connect to the mysql database
-$link = mysqli_connect("prod_sql", "root", mysqlpaswd, "skitter");
+$link = mysqli_connect("prod_sql", "root", $mysqlpaswd, "skitter");
 
 //Check connection
 if (mysqli_connect_errno()) {
@@ -21,10 +22,19 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
+//Get user they want
+if (isset($_GET["username"])){
+	$sqlstring = "SELECT email, username, photo FROM users WHERE username=?";
+	$username = $_GET["username"];
+}
+//Search by their own email
+else{
+	$username = $_GET["email"];
+	$sqlstring = "SELECT email, username, photo FROM users WHERE email=?";
+}
+
 //Prepared statement
-if ($stmt = mysqli_prepare($link, "SELECT email, username, photo FROM users WHERE username=?")){
-	 //Get user they want
-	 $username = $_GET["username"];
+if ($stmt = mysqli_prepare($link, $sqlstring)){	 
 	 //Escape input
 	 if(!mysqli_set_charset($link, "utf8")){
 		http_response_code(500);

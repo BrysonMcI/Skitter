@@ -2,18 +2,28 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
+
 @Injectable()
-export class YourProfileService {
+export class InitiateService {
 
   constructor(private http: Http) { }
 
-  changeDisplayName(username: string) {
+  login(loginData: { "username": string, "password": string }): Promise<void | any> {
     var headers = new Headers();
     headers.set('Content-Type', 'application/x-www-form-urlencoded')
     headers.set('X-Requested-With', 'XMLHttpRequest')
-    return this.http.post('/changeDisplayName', this.formatData({ "newUsername": username }), { headers: headers })
+    return this.http.post('/signin', this.formatData(loginData), {headers: headers})
       .toPromise()
       .then(response => response.json())
+      .catch(this.handleError);
+  }
+
+  getProfileData(): Promise<void | any> {
+    return this.http.get('/getProfileInformation')
+      .toPromise()
+      .then(function (response) {
+        return response.json() as { "email": string, "username": string, "picture": any }
+      })
       .catch(this.handleError);
   }
 
@@ -36,4 +46,5 @@ export class YourProfileService {
     }
     return returnData;
   }
+
 }
