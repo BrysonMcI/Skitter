@@ -1,4 +1,28 @@
 language: python
+before_install:
+  # Update docker-engine.
+  - sudo apt-get update
+  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+
+  # Travis uses an older docker-composer (v1.4.2), we need to update it.
+  - docker-compose --version
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.8.0-rc2/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+  # Do AWS login for ECR.
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - export AWS_ACCESS_KEY_ID=$TRAVIS_ACCESS
+  - export AWS_SECRET_ACCESS_KEY=$TRAVIS_SECRET
+  - $(aws ecr get-login --region us-east-2)
+
+  # Compose docker containers.
+  - docker-compose --version
+  - docker-compose up -d
+  - docker images
+  - docker ps
 python:
   - "2.7"
   - "3.5"
